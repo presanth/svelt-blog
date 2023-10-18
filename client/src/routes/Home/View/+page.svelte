@@ -1,0 +1,97 @@
+<script>
+    import Blog from "../../Blog/Blog.svelte";
+    import Sidenav from "../../Nav/Sidenav.svelte";
+    import { onMount } from "svelte";
+
+    let uid = "ced";
+    /**
+     * @type {never[]}
+     */
+    let res = [];
+
+    let charnum = "10"
+
+    async function getSingleblog(){
+        const result = await fetch('http://localhost:8000/blog/getpersonalBlogs/'+uid)
+        res = await result.json();
+        // @ts-ignore
+        charnum = res[0].blogcontent.length;
+        // @ts-ignore
+        console.log(res);
+    }
+
+    onMount(getSingleblog)
+</script>
+
+<div>
+    
+</div>
+
+<div class='home_container'>
+    <Sidenav/>
+    <div class='home_content'>
+        <div class='home_blog'>
+            <Blog data={res} char={charnum}/>
+        </div>
+    </div>
+</div>
+
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    .home_container{
+        width: 100%;
+        height: 100vh;
+        display: flex;
+    }
+    .home_content{
+        width: 83%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #030111;
+    }
+    .search_box{
+        width: 94%;
+        height: 4rem;
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid rgb(73 73 73);
+        margin-top: 1rem;
+    }
+    .search_inp{
+        width: 30%;
+        height: 2.5rem;
+        border-radius: 20px;
+        border: 1px solid black;
+        outline: none;
+        padding-left: 20px;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+    .search_inp::placeholder{
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .search_box .fa-magnifying-glass{
+        position: absolute;
+        color: black;
+        margin-left: 21.5rem;
+        font-size: 17px;
+    }
+    .home_blog{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: auto;
+        
+    }
+    .home_blog::-webkit-scrollbar{
+        display: none;
+    }
+
+</style>
